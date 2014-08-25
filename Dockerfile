@@ -5,7 +5,7 @@ CMD []
 ENTRYPOINT ["/usr/bin/consul", "agent", "-server", "-data-dir=/consul", \
             "-client=0.0.0.0", "-ui-dir=/webui"]
 
-EXPOSE 8500 8600/udp 8400 8301 8302
+EXPOSE 8500 8600/udp 8400 8300
 
 ENV GOPATH /go
 
