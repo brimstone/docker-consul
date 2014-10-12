@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# error handling
+set -euo pipefail
+
+# performance
+export GOMAXPROCS=2
+
+# figure out our verb
+verb="$1"
+shift
+
+# if it's not agent, run like consul
+[ "$verb" != "agent" ] && exec /usr/bin/consul "$verb" "$@"
+
+# otherwise
+
+# Get our domain from our environment
+DOMAIN=${DOMAIN:=consul}
+DATACENTER=${DATACENTER:=dc1}
+
+# write our config file
+cat << dog > /consul.json
+{
+	"datacenter": "$DATACENTER",
+	"domain": "$DOMAIN",
+	"server": true,
+	"data_dir": "/consul",
+	"client_addr": "0.0.0.0",
+	"ui_dir": "/webui"
+}
+dog
+
+[ -n "$WAN" ] && (
+	sleep 2
+	for w in "$WAN"; do
+		/usr/bin/consul join -wan "$w"
+	done
+)&
+
+# slip our config file into our cmd line
+exec /usr/bin/consul agent -config-file /consul.json "$@"

@@ -2,8 +2,7 @@ FROM brimstone/ubuntu:14.04
 
 CMD []
 
-ENTRYPOINT ["/usr/bin/consul", "agent", "-server", "-data-dir=/consul", \
-            "-client=0.0.0.0", "-ui-dir=/webui"]
+ENTRYPOINT [ "/consul-loader", "agent" ]
 
 EXPOSE 8500 8600/udp 8400 8300 8301 8302
 
@@ -16,10 +15,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists \
 
-	&& go get -v github.com/brimstone/consul \
+	&& go get -v github.com/hashicorp/consul \
 	&& mv $GOPATH/bin/consul /usr/bin/consul \
 
-    && cd $GOPATH/src/github.com/brimstone/consul/ui \
+    && cd $GOPATH/src/github.com/hashicorp/consul/ui \
 	&& make dist \
 	&& mv dist /webui \
 
@@ -27,3 +26,5 @@ RUN apt-get update \
 	&& apt-get remove --purge -y $(diff /tmp/dpkg.clean /tmp/dpkg.dirty | awk '/^>/ {print $2}') \
 	&& rm /tmp/dpkg.* \
 	&& rm -rf $GOPATH
+
+ADD consul-loader /
