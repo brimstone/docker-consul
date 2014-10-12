@@ -18,6 +18,7 @@ shift
 # Get our domain from our environment
 DOMAIN=${DOMAIN:=consul}
 DATACENTER=${DATACENTER:=dc1}
+WAN="${WAN:=}"
 
 # write our config file
 cat << dog > /consul.json
