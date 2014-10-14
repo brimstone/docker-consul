@@ -15,7 +15,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists \
 
-	&& go get -v github.com/hashicorp/consul \
+	&& go get -v github.com/brimstone/consul \
 	&& mv $GOPATH/bin/consul /usr/bin/consul \
 
     && cd $GOPATH/src/github.com/hashicorp/consul/ui \
