@@ -2,7 +2,7 @@ FROM brimstone/ubuntu:14.04
 
 CMD []
 
-ENTRYPOINT [ "/consul-loader", "agent" ]
+ENTRYPOINT [ "/consul-loader" ]
 
 EXPOSE 8500 8600/udp 8400 8300 8301 8302
 
