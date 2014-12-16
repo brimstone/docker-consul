@@ -34,11 +34,12 @@ dog
 
 [ -n "$WAN" ] && (
 	sleep 2
-	for w in "$WAN"; do
+	for w in $WAN; do
 		/usr/bin/consul join -wan "$w"
 	done
 )&
 
+echo "Starting loop."
 # slip our config file into our cmd line
 until /usr/bin/consul agent -config-file /consul.json "$@"; do
 	sleep 1
