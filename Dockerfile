@@ -6,25 +6,16 @@ ENTRYPOINT [ "/consul-loader" ]
 
 EXPOSE 8500 8600/udp 8400 8300 8301 8302
 
-ENV GOPATH /go
+RUN package --list /tmp/dpkg.txt wget unzip \
+ && wget https://dl.bintray.com/mitchellh/consul/0.5.0_linux_amd64.zip \
+    -O /tmp/consul.zip \
+ && unzip /tmp/consul.zip \
+ && rm /tmp/consul.zip \
+ && wget https://dl.bintray.com/mitchellh/consul/0.5.0_web_ui.zip \
+    -O /tmp/consul_webui.zip \
+ && unzip /tmp/consul_webui.zip \
+ && rm /tmp/consul_webui.zip \
 
-RUN apt-get update \
-	&& dpkg -l | awk '/^ii/ {print $2}' > /tmp/dpkg.clean \
-    && apt-get install -y --no-install-recommends git golang ca-certificates \
-        build-essential ruby-sass ruby-uglifier\
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists \
-
-	&& go get -v github.com/hashicorp/consul \
-	&& mv $GOPATH/bin/consul /usr/bin/consul \
-
-    && cd $GOPATH/src/github.com/hashicorp/consul/ui \
-	&& make dist \
-	&& mv dist /webui \
-
-	&& dpkg -l | awk '/^ii/ {print $2}' > /tmp/dpkg.dirty \
-	&& apt-get remove --purge -y $(diff /tmp/dpkg.clean /tmp/dpkg.dirty | awk '/^>/ {print $2}') \
-	&& rm /tmp/dpkg.* \
-	&& rm -rf $GOPATH
+ && package --purge /tmp/dpkg.txt
 
 ADD consul-loader /
