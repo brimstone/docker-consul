@@ -11,7 +11,7 @@ verb="$1"
 shift
 
 # if it's not agent, run like consul
-[ "$verb" != "agent" ] && exec /consul "$verb" "$@"
+[ "$verb" != "agent" ] && exec /usr/bin/consul "$verb" "$@"
 
 # otherwise
 
@@ -35,12 +35,12 @@ dog
 [ -n "$WAN" ] && (
 	sleep 2
 	for w in $WAN; do
-		/consul join -wan "$w"
+		/usr/bin/consul join -wan "$w"
 	done
 )&
 
 echo "Starting loop."
 # slip our config file into our cmd line
-until /consul agent -config-file /consul.json "$@"; do
+until /usr/bin/consul agent -config-file /consul.json "$@"; do
 	sleep 1
 done
