@@ -15,6 +15,7 @@ RUN package --list /tmp/dpkg.txt wget unzip \
  && wget https://dl.bintray.com/mitchellh/consul/0.5.0_web_ui.zip \
     -O /tmp/consul_webui.zip \
  && unzip /tmp/consul_webui.zip \
+ && mv /dist /webui \
  && rm /tmp/consul_webui.zip \
 
  && package --purge /tmp/dpkg.txt
