@@ -22,7 +22,7 @@ WAN="${WAN:=}"
 
 GWDEV="$(ip route list 0/0 | awk '{print $NF}')"
 
-ADVERTISE="${ADVERTISE:=$(ip -f inet -o a s | awk -F " +|/" "\$2 != \"lo\" && \$2 != \"$GWDEV\" {print \$4}")}"
+ADVERTISE="${ADVERTISE:=$(ip -f inet -o a s | awk -F " +|/" "\$2 != \"lo\" && \$2 != \"$GWDEV\" {print \$4; exit(0)}")}"
 
 # write our config file
 cat << dog > /consul.json
