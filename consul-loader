@@ -24,8 +24,6 @@ GWDEV="$(ip route list 0/0 | awk '{print $NF}')"
 
 ADVERTISE="${ADVERTISE:-$(ip -f inet -o a s | awk -F " +|/" "\$2 != \"lo\" && \$2 != \"$GWDEV\" {print \$4; exit(0)}")}"
 
-RECURSORS="${RECURSORS:-}"
-
 # write our config file
 cat << dog > /consul.json
 {
@@ -35,8 +33,7 @@ cat << dog > /consul.json
 	"data_dir": "/consul",
 	"client_addr": "0.0.0.0",
 	"advertise_addr": "$ADVERTISE",
-	"ui_dir": "/webui",
-	"recursors": "$RECURSORS"
+	"ui_dir": "/webui"
 }
 dog
 
